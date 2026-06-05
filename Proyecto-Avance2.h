@@ -1,7 +1,7 @@
 
 
-#ifndef PROYECTO_AVANCE2_H
-#define PROYECTO_AVANCE2_H
+#ifndef PROYECTO_INTEGRADOR_A01709797_AVANCE4_H
+#define PROYECTO_INTEGRADOR_A01709797_AVANCE4_H
 
 #include "iostream"
 using namespace std;
@@ -11,59 +11,126 @@ protected:
     string Modelo,Placas;
     int Anio,Tanque,EficienciaL;
 public:
-    Vehiculos(string Mo,string Pl,int An,int Ta, int Ef);
-    virtual void MostrarInfo() = 0;
+    Vehiculos(string Modelo,string Placas,int Anio,int Tanque, int EfficienciaL);
+    virtual void MostrarInfo(int desechable);
+    virtual float CalcularImpuesto() = 0;
+    virtual float CalcularMantenimiento(int AnioA) = 0;
+    bool operator==(const Vehiculos& otro);
     string getPlacas();
     string getModelo();
-    int getAnio();
+    virtual ~Vehiculos(){};
 };
 
-Vehiculos:: Vehiculos(string Mo,string Pl,int An,int Ta, int Ef){
-    Modelo = Mo;
-    Placas = Pl;
-    Anio = An;
-    Tanque = Ta;
-    EficienciaL = Ef;
+Vehiculos:: Vehiculos(string Modelo,string Placas,int Anio,int Tanque, int EficienciaL){
+    this->Modelo = Modelo;
+    this->Placas = Placas;
+    this->Anio = Anio;
+    this->Tanque = Tanque;
+    this->EficienciaL = EficienciaL;
 };
 
-void Vehiculos::MostrarInfo(){
-    cout<< "Es un "<<Modelo<<" con las placas "<<Placas<<" del año "<<Anio<<endl;
+void Vehiculos::MostrarInfo(int desechable){
+    if (desechable == 1){
+        cout<< " es un ";
+    }
+    if (desechable ==2){
+        cout<< " es una ";
+    }
+    cout<<Modelo<<" con las placas "<<Placas<<" del año "<<Anio;
 };
+
+bool Vehiculos :: operator==(const Vehiculos& otro){
+    if (this->Anio == otro.Anio && this->Modelo == otro.Modelo){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 string Vehiculos::getPlacas(){
     return Placas;
 }
 string Vehiculos::getModelo(){
     return Modelo;
 }
-int Vehiculos::getAnio(){
-    return Anio;
+
+//incia carro
+class Carro: public Vehiculos{
+private:
+    string carroceria;
+    int puertas;
+    bool tieneAire;
+public:
+    Carro(string Modelo, string Placas, int Anio, int Tanque, int EfficienciaL,string carroceria, int puertas,bool tieneAire);
+    void MostrarInfo (int desechable) ;
+    float CalcularImpuesto() ;
+    float CalcularMantenimiento(int AnioA) ;
+};
+
+Carro::Carro(string Modelo, string Placas, int Anio, int Tanque, int EfficienciaL,string carroceria, int puertas,bool tieneAire)
+        : Vehiculos(Modelo,Placas,Anio,Tanque,EficienciaL){
+    this->carroceria=carroceria;
+    this->puertas=puertas;
+    this->tieneAire=tieneAire;
 }
 
+float Carro:: CalcularImpuesto(){
+    float impuesto = 1000;
+    float AnioI = Anio;
+    if (AnioI >= 2020){
+        impuesto += (AnioI - 2026) * 100;
+    }
+    return impuesto;
+}
+float Carro:: CalcularMantenimiento(int AnioA){
+    float costo = 1000;
+    float puertasM = puertas;
+    if (0<= Anio - AnioA ||Anio - AnioA  < 5 ){
+        costo += 200 * puertasM;
+    }
+    if (5<= Anio - AnioA ||Anio - AnioA  < 10 ){
+        costo += 300 * puertasM;
+    }
+    if (10<= Anio - AnioA){
+        costo += 500 * puertasM;
+    }
+    if (tieneAire == true){
+        costo += 200;
+    }
+    return costo;
+}
+
+void Carro:: MostrarInfo(int desechable){
+    cout<<"El carro";
+    Vehiculos::MostrarInfo(desechable);
+    cout <<" ,tiene una carroceria tipo "<<carroceria<<" con "<<puertas<<" puertas y "<<endl;
+}
+
+//inicia moto
 class Moto: public Vehiculos{
 private:
     string TipoCadena,Manubrio,Modalidad;
     bool Sidecar;
 public:
-    Moto();
-    Moto(string TC,string MA,string MD,bool SD, Vehiculos &m);
-    int CalcDistanciaK(int EficieciaL,int Tanque,string TipoCadena);
-    void SetSidecar(bool NewSidecar);
-    void MostrarInfo () override;
+    Moto(string Modelo, string Placas, int Anio, int Tanque, int EfficienciaL,string TipoCadena,string Manubrio,string Modalidad,bool Sidecar);
+    void MostrarInfo (int desechable) ;
+    float CalcularImpuesto() ;
+    float CalcularMantenimiento(int AnioA) ;
 
 };
-
-Moto::Moto(string TC,string MA,string MD,bool SD,Vehiculos &m )
-: Vehiculos(m){
-    TipoCadena=TC;
-    Manubrio=MA;
-    Modalidad=MD;
-    Sidecar=SD;
+Moto::Moto(string Modelo, string Placas, int Anio, int Tanque, int EfficienciaL,string TipoCadena,string Manubrio,string Modalidad,bool Sidecar)
+        : Vehiculos(Modelo,Placas,Anio,Tanque,EficienciaL){
+    this->TipoCadena=TipoCadena;
+    this->Manubrio=Manubrio;
+    this->Modalidad=Modalidad;
+    this->Sidecar=Sidecar;
 };
 
-void Moto:: MostrarInfo(){
-    cout<<"La moto"<<endl;
-    Vehiculos::MostrarInfo();
-    cout <<"Es "<<Modalidad<<" tiene una cadena "<<TipoCadena<<" con un manubrio ";
+void Moto:: MostrarInfo(int desechable){
+    cout<<"La moto";
+    Vehiculos::MostrarInfo(desechable);
+    cout <<" , de tipo "<<Modalidad<<" tiene una cadena "<<TipoCadena<<" con un manubrio "<<Manubrio;
     if (Sidecar == true){
         cout<<" y tiene un sidecar"<<endl;
     }
@@ -72,79 +139,48 @@ void Moto:: MostrarInfo(){
     }
 }
 
-int Moto::CalcDistanciaK(int EficieciaL, int Tanque, string TipoCadena) {
-    if (TipoCadena == "Reforzada" || TipoCadena == "O-Ring") {
-        cout <<"La moto recorrera una distancia máxima de "<< Tanque*EficienciaL*0.95<<"Km"<<endl;
-    } else if (TipoCadena == "Racing" || TipoCadena == "Directa") {
-        cout <<"La moto recorrera una distancia máxima de "<< Tanque*EficienciaL*1.05<<"Km"<<endl;
+float Moto:: CalcularImpuesto(){
+    float impuesto = 600;
+    float AnioI = Anio;
+    if (AnioI >= 2015){
+        impuesto += (AnioI - 2026) * 75;
     }
-}
-
-void Moto::SetSidecar(bool NewSidecar) {
-    Sidecar = NewSidecar;
-}
-
-class Carro: public Vehiculos{
-private:
-    string Carroceria;
-    int BolsasAire,Puertas;
-    bool AireAcondicionado;
-public:
-    Carro();
-    Carro(string CA,int BA,int PU,bool AA,Vehiculos &c);
-    int CalcDistanciaK(int EficienciaL, int Tanque, bool AireAcondicionado);
-    void BloquearPuertas();
-    void SetAire(bool EstadoAire);
-    void MostrarInfo () override;
-};
-
-Carro:: Carro(string CA,int BA,int PU,bool AA,Vehiculos &c)
-:Vehiculos(c){
-    Carroceria=CA;
-    BolsasAire=BA;
-    Puertas=PU;
-    AireAcondicionado=AA;
-}
-
-int Carro::CalcDistanciaK(int EficieciaL, int Tanque, bool AireAcondicionado){
-    if (AireAcondicionado == true) {
-        cout <<"El carro recorrera una distancia máxima de "<< Tanque*EficienciaL*0.88<<"Km"<<endl;
+    if (Sidecar == true){
+        impuesto += 400;
     }
-    else{
-        cout <<"El carro recorrera una distancia máxima de "<< Tanque*EficienciaL*1<<"Km"<<endl;
+    return impuesto;
+}
+float Moto:: CalcularMantenimiento(int AnioA){
+    float costo = 1000;
+    if (TipoCadena == "Reforzada" || TipoCadena == "O-Ring"){
+        costo += 300;
     }
+    if (TipoCadena == "Racing" || TipoCadena == "Directa"){
+        costo += 600;
+    }
+    if (Sidecar == true){
+        costo += 800;
+    }
+    return costo;
 }
 
-void Carro::BloquearPuertas() {
-    cout <<"Se bloquearon las puertas"<<endl;
-}
-
-void Carro ::SetAire(bool EstadoAire){
-    AireAcondicionado = EstadoAire;
-}
-
-void Carro:: MostrarInfo(){
-    cout<<"El carro"<<endl;
-    Vehiculos::MostrarInfo();
-    cout <<"Tiene una carroceria tipo "<<Carroceria<<" con "<<Puertas<<" puertas y "<<BolsasAire<<" bolsas de aire"<<endl;
-}
-
+//inicia Personas
 class Persona{
 protected:
     string Nombre,RFC,Domicilio;
     int ID;
 public:
-    Persona();
     Persona(string Nombre,string RFC,string Domicilio,int ID);
     string getNombre();
     string getRFC();
     string getDomicilio();
     int getID();
 };
-Persona::Persona(string NO,string RF,string DO,int ID) {
-    Nombre = NO;
-    RFC = RF;
-    Domicilio = DO;
+Persona::Persona(string Nombre,string RFC,string Domicilio,int ID) {
+    this->Nombre = Nombre;
+    this->RFC = RFC;
+    this->Domicilio = Domicilio;
+    this->ID = ID;
 }
 string Persona:: getNombre(){
     return Nombre;
@@ -161,42 +197,41 @@ int Persona::getID(){
 
 class Vender : public Persona{
 private:
-    string placas,modelo,Duenio;
-    Persona Cliente,Vendedor;
-    float Precio;
+    string placas,modelo,duenio;
+    Persona* vendedor;
+    Persona* cliente;
+    float precio;
 public:
-    Vender(float Precio,string Duenio,string placas,Persona cliente, Persona vendedor);
-    void Facturar(Persona Cliente,Persona Vendedor,float Precio,string placas,string Duenio);
-    void TransferirDuenio(Persona Cliente);
+    Vender(float precio,string duenio,string placas,Persona* vendedor,Persona* cliente);
+    void Facturar();
+    void TransferirDuenio();
 };
 
-Vender::Vender(float PR,string DU,string pL, Persona CL, Persona VE){
-    Precio = PR;
-    Duenio = DU;
-    placas = pL;
-    Cliente = CL;
-    Vendedor = VE;
+Vender::Vender(float precio,string duenio,string placas,Persona* vendedor,Persona* cliente): Persona(Nombre,RFC,Domicilio,ID){
+    this->precio = precio;
+    this->duenio = duenio;
+    this->placas = placas;
+    this->vendedor = vendedor;
+    this->cliente = cliente;
 };
-void Vender::Facturar(Persona Cliente,Persona Vendedor,float Precio,string placas,string Duenio){
+void Vender::Facturar(){
     cout<<"-----------------------------------------------------"<<endl;
     cout<<"-------------------    FACTURA     ------------------"<<endl;
     cout<<"-----------------------------------------------------"<<endl;
-    cout<<"Monto pagado : "<<Precio<<endl;
+    cout<<"Monto pagado : "<<precio<<endl;
     cout<<"Placas del vehiculo : "<<placas<<endl;
-    cout<<"Dueño actual : "<<Duenio<<endl;
+    cout<<"Dueño actual : "<<duenio<<endl;
     cout<<"-----------------------------------------------------"<<endl;
     cout<<"Datos del vendedor"<<endl;
-    cout<<"Nombre : "<<Vendedor.getNombre()<<endl;
-    cout<<"ID : "<<Vendedor.getID()<<endl;
+    cout<<"Nombre : "<<vendedor->getNombre()<<endl;
+    cout<<"ID : "<<vendedor->getID()<<endl;
     cout<<"-----------------------------------------------------"<<endl;
     cout<<"Datos del comprador"<<endl;
-    cout<<"Nombre : "<<Cliente.getNombre()<<"RFC : "<<Cliente.getRFC()<<endl;
-    cout<<"Domicilio : "<<Cliente.getDomicilio()<<endl;
+    cout<<"Nombre : "<<cliente->getNombre()<<"RFC : "<<cliente->getRFC()<<endl;
+    cout<<"Domicilio : "<<cliente->getDomicilio()<<endl;
 }
-void Vender::TransferirDuenio(Persona Cliente){
-    Duenio = Cliente.getNombre();
+void Vender::TransferirDuenio(){
+    duenio = cliente->getNombre();
 }
 
-
-
-#endif //PROYECTO_AVANCE2_H
+#endif //PROYECTO_INTEGRADOR_A01709797_AVANCE4_H
