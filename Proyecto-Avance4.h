@@ -8,25 +8,25 @@ using namespace std;
 
 class Vehiculos{
 protected:
-    string modelo,placas;
-    int anio,tanque,eficienciaL;
+    string Modelo,Placas;
+    int Anio,Tanque,EficienciaL;
 public:
-    Vehiculos(string modelo,string placas,int anio,int tanque, int efficienciaL);
+    Vehiculos(string Modelo,string Placas,int Anio,int Tanque, int EfficienciaL);
     virtual void MostrarInfo(int desechable);
     virtual float CalcularImpuesto() = 0;
-    virtual float CalcularMantenimiento(int anioA) = 0;
+    virtual float CalcularMantenimiento(int AnioA) = 0;
     bool operator==(const Vehiculos& otro);
     string getPlacas();
     string getModelo();
     virtual ~Vehiculos(){};
 };
 
-Vehiculos:: Vehiculos(string modelo,string placas,int anio,int tanque, int eficienciaL){
-    this->Modelo = modelo;
-    this->Placas = placas;
-    this->Anio = anio;
-    this->Tanque = tanque;
-    this->EficienciaL = eficienciaL;
+Vehiculos:: Vehiculos(string Modelo,string Placas,int Anio,int Tanque, int EficienciaL){
+    this->Modelo = Modelo;
+    this->Placas = Placas;
+    this->Anio = Anio;
+    this->Tanque = Tanque;
+    this->EficienciaL = EficienciaL;
 };
 
 void Vehiculos::MostrarInfo(int desechable){
@@ -40,7 +40,7 @@ void Vehiculos::MostrarInfo(int desechable){
 };
 
 bool Vehiculos :: operator==(const Vehiculos& otro){
-    if (this->anio == otro.anio && this->modelo == otro.modelo){
+    if (this->Anio == otro.Anio && this->Modelo == otro.Modelo){
         return true;
     }
     else{
@@ -49,10 +49,10 @@ bool Vehiculos :: operator==(const Vehiculos& otro){
 }
 
 string Vehiculos::getPlacas(){
-    return placas;
+    return Placas;
 }
 string Vehiculos::getModelo(){
-    return modelo;
+    return Modelo;
 }
 
 //incia carro
@@ -62,14 +62,14 @@ private:
     int puertas;
     bool tieneAire;
 public:
-    Carro(string modelo, string placas, int anio, int tanque, int efficienciaL,string carroceria, int puertas,bool tieneAire);
+    Carro(string Modelo, string Placas, int Anio, int Tanque, int EfficienciaL,string carroceria, int puertas,bool tieneAire);
     void MostrarInfo (int desechable) ;
     float CalcularImpuesto() ;
-    float CalcularMantenimiento(int anioA) ;
+    float CalcularMantenimiento(int AnioA) ;
 };
 
-Carro::Carro(string modelo, string placas, int anio, int tanque, int efficienciaL,string carroceria, int puertas,bool tieneAire)
-        : Vehiculos(modelo,placas,anio,tanque,eficienciaL){
+Carro::Carro(string Modelo, string Placas, int Anio, int Tanque, int EfficienciaL,string carroceria, int puertas,bool tieneAire)
+        : Vehiculos(Modelo,Placas,Anio,Tanque,EficienciaL){
     this->carroceria=carroceria;
     this->puertas=puertas;
     this->tieneAire=tieneAire;
@@ -77,22 +77,22 @@ Carro::Carro(string modelo, string placas, int anio, int tanque, int efficiencia
 
 float Carro:: CalcularImpuesto(){
     float impuesto = 1000;
-    float anioI = anio;
-    if (anioI >= 2020){
-        impuesto += (anioI - 2026) * 100;
+    float AnioI = Anio;
+    if (AnioI >= 2020){
+        impuesto += (AnioI - 2026) * 100;
     }
     return impuesto;
 }
-float Carro:: CalcularMantenimiento(int anioA){
+float Carro:: CalcularMantenimiento(int AnioA){
     float costo = 1000;
     float puertasM = puertas;
-    if (0<= anio - anioA ||anio - anioA  < 5 ){
+    if (0<= Anio - AnioA ||Anio - AnioA  < 5 ){
         costo += 200 * puertasM;
     }
-    if (5<= anio - anioA ||anio - anioA  < 10 ){
+    if (5<= Anio - AnioA ||Anio - AnioA  < 10 ){
         costo += 300 * puertasM;
     }
-    if (10<= anio - anioA){
+    if (10<= Anio - AnioA){
         costo += 500 * puertasM;
     }
     if (tieneAire == true){
@@ -102,7 +102,7 @@ float Carro:: CalcularMantenimiento(int anioA){
 }
 
 void Carro:: MostrarInfo(int desechable){
-    cout<<"El carro";
+    cout<<"El carro ";
     Vehiculos::MostrarInfo(desechable);
     cout <<" ,tiene una carroceria tipo "<<carroceria<<" con "<<puertas<<" puertas y "<<endl;
 }
@@ -110,28 +110,28 @@ void Carro:: MostrarInfo(int desechable){
 //inicia moto
 class Moto: public Vehiculos{
 private:
-    string tipoCadena,manubrio,modalidad;
-    bool sidecar;
+    string TipoCadena,Manubrio,Modalidad;
+    bool Sidecar;
 public:
-    Moto(string modelo, string placas, int anio, int tanque, int efficienciaL,string tipoCadena,string manubrio,string modalidad,bool sidecar);
+    Moto(string Modelo, string Placas, int Anio, int Tanque, int EfficienciaL,string TipoCadena,string Manubrio,string Modalidad,bool Sidecar);
     void MostrarInfo (int desechable) ;
     float CalcularImpuesto() ;
-    float CalcularMantenimiento(int anioA) ;
+    float CalcularMantenimiento(int AnioA) ;
 
 };
-Moto::Moto(string modelo, string placas, int anio, int tanque, int efficienciaL,string tipoCadena,string manubrio,string modalidad,bool sidecar)
-        : Vehiculos(modelo,placas,anio,tanque,eficienciaL){
-    this->TipoCadena=tipoCadena;
-    this->Manubrio=manubrio;
-    this->Modalidad=modalidad;
-    this->Sidecar=sidecar;
+Moto::Moto(string Modelo, string Placas, int Anio, int Tanque, int EfficienciaL,string TipoCadena,string Manubrio,string Modalidad,bool Sidecar)
+        : Vehiculos(Modelo,Placas,Anio,Tanque,EficienciaL){
+    this->TipoCadena=TipoCadena;
+    this->Manubrio=Manubrio;
+    this->Modalidad=Modalidad;
+    this->Sidecar=Sidecar;
 };
 
 void Moto:: MostrarInfo(int desechable){
-    cout<<"La moto";
+    cout<<"La moto ";
     Vehiculos::MostrarInfo(desechable);
-    cout <<" , de tipo "<<modalidad<<" tiene una cadena "<<tipoCadena<<" con un manubrio "<<manubrio;
-    if (sidecar == true){
+    cout <<" , de tipo "<<Modalidad<<" tiene una cadena "<<TipoCadena<<" con un manubrio "<<Manubrio;
+    if (Sidecar == true){
         cout<<" y tiene un sidecar"<<endl;
     }
     else{
@@ -141,24 +141,24 @@ void Moto:: MostrarInfo(int desechable){
 
 float Moto:: CalcularImpuesto(){
     float impuesto = 600;
-    float anioI = anio;
-    if (anioI >= 2015){
-        impuesto += (anioI - 2026) * 75;
+    float AnioI = Anio;
+    if (AnioI >= 2015){
+        impuesto += (AnioI - 2026) * 75;
     }
-    if (sidecar == true){
+    if (Sidecar == true){
         impuesto += 400;
     }
     return impuesto;
 }
-float Moto:: CalcularMantenimiento(int anioA){
+float Moto:: CalcularMantenimiento(int AnioA){
     float costo = 1000;
-    if (tipoCadena == "Reforzada" || tipoCadena == "O-Ring"){
+    if (TipoCadena == "Reforzada" || TipoCadena == "O-Ring"){
         costo += 300;
     }
-    if (tipoCadena == "Racing" || tipoCadena == "Directa"){
+    if (TipoCadena == "Racing" || TipoCadena == "Directa"){
         costo += 600;
     }
-    if (sidecar == true){
+    if (Sidecar == true){
         costo += 800;
     }
     return costo;
@@ -167,29 +167,29 @@ float Moto:: CalcularMantenimiento(int anioA){
 //inicia Personas
 class Persona{
 protected:
-    string nombre,RFC,domicilio;
+    string Nombre,RFC,Domicilio;
     int ID;
 public:
-    Persona(string nombre,string RFC,string domicilio,int ID);
+    Persona(string Nombre,string RFC,string Domicilio,int ID);
     string getNombre();
     string getRFC();
     string getDomicilio();
     int getID();
 };
-Persona::Persona(string nombre,string RFC,string domicilio,int ID) {
-    this->Nombre = nombre;
+Persona::Persona(string Nombre,string RFC,string Domicilio,int ID) {
+    this->Nombre = Nombre;
     this->RFC = RFC;
-    this->Domicilio = domicilio;
+    this->Domicilio = Domicilio;
     this->ID = ID;
 }
 string Persona:: getNombre(){
-    return nombre;
+    return Nombre;
 }
 string Persona :: getRFC(){
     return RFC;
 }
 string Persona::getDomicilio(){
-    return domicilio;
+    return Domicilio;
 }
 int Persona::getID(){
     return ID;
@@ -205,6 +205,7 @@ public:
     Vender(float precio,string duenio,string placas,Persona* vendedor,Persona* cliente);
     void Facturar();
     void TransferirDuenio();
+    string getPlacas_();
 };
 
 Vender::Vender(float precio,string duenio,string placas,Persona* vendedor,Persona* cliente): Persona(Nombre,RFC,Domicilio,ID){
@@ -233,5 +234,7 @@ void Vender::Facturar(){
 void Vender::TransferirDuenio(){
     duenio = cliente->getNombre();
 }
-
+string Vender::getPlacas_(){
+    return placas;
+}
 #endif //PROYECTO_INTEGRADOR_A01709797_AVANCE4_H
