@@ -1,34 +1,32 @@
 
 
-#ifndef PROYECTO_INTEGRADOR_A01709797_AVANCE4_H
-#define PROYECTO_INTEGRADOR_A01709797_AVANCE4_H
+#ifndef PROYECTO_INTEGRADOR_A01709797_SISTEMA-VEHICULOS_H
+#define PROYECTO_INTEGRADOR_A01709797_SISTEMA-VEHICULOS_H
 
 #include "iostream"
 using namespace std;
 
 class Vehiculos{
 protected:
-    string Modelo,Placas;
-    int Anio,Tanque,EficienciaL;
+    string modelo,placas;
+    int anio,tanque,eficienciaL;
 public:
-    Vehiculos(string Modelo,string Placas,int Anio,int Tanque, int EfficienciaL);
+    Vehiculos(string modelo,string placas,int anio,int tanque, int efficienciaL);
     virtual void MostrarInfo(int desechable);
     virtual float CalcularImpuesto() = 0;
     virtual float CalcularMantenimiento(int AnioA) = 0;
-    bool operator==(const Vehiculos& otro);
+    bool operator==(Vehiculos& otro);
     string getPlacas();
     string getModelo();
-    virtual ~Vehiculos(){};
+    int getAnio();
 };
-
-Vehiculos:: Vehiculos(string Modelo,string Placas,int Anio,int Tanque, int EficienciaL){
-    this->Modelo = Modelo;
-    this->Placas = Placas;
-    this->Anio = Anio;
-    this->Tanque = Tanque;
-    this->EficienciaL = EficienciaL;
+Vehiculos:: Vehiculos(string modelo,string placas,int anio,int tanque, int eficienciaL){
+    this->modelo = modelo;
+    this->placas = placas;
+    this->anio = anio;
+    this->tanque = tanque;
+    this->eficienciaL = eficienciaL;
 };
-
 void Vehiculos::MostrarInfo(int desechable){
     if (desechable == 1){
         cout<< " es un ";
@@ -36,23 +34,24 @@ void Vehiculos::MostrarInfo(int desechable){
     if (desechable ==2){
         cout<< " es una ";
     }
-    cout<<Modelo<<" con las placas "<<Placas<<" del año "<<Anio;
+    cout<<modelo<<" con las placas "<<placas<<" del año "<<anio;
 };
-
-bool Vehiculos :: operator==(const Vehiculos& otro){
-    if (this->Anio == otro.Anio && this->Modelo == otro.Modelo){
+bool Vehiculos :: operator==(Vehiculos& otro){
+    if (this->modelo==otro.modelo and this->anio == otro.anio){
         return true;
     }
     else{
         return false;
     }
 }
-
 string Vehiculos::getPlacas(){
-    return Placas;
+    return placas;
 }
 string Vehiculos::getModelo(){
-    return Modelo;
+    return modelo;
+}
+int Vehiculos :: getAnio(){
+    return anio;
 }
 
 //incia carro
@@ -62,14 +61,14 @@ private:
     int puertas;
     bool tieneAire;
 public:
-    Carro(string Modelo, string Placas, int Anio, int Tanque, int EfficienciaL,string carroceria, int puertas,bool tieneAire);
+    Carro(string modelo, string placas, int anio, int tanque, int efficienciaL,string carroceria, int puertas,bool tieneAire);
     void MostrarInfo (int desechable) ;
     float CalcularImpuesto() ;
     float CalcularMantenimiento(int AnioA) ;
 };
 
-Carro::Carro(string Modelo, string Placas, int Anio, int Tanque, int EfficienciaL,string carroceria, int puertas,bool tieneAire)
-        : Vehiculos(Modelo,Placas,Anio,Tanque,EficienciaL){
+Carro::Carro(string modelo, string placas, int anio, int tanque, int eficienciaL,string carroceria, int puertas,bool tieneAire)
+        : Vehiculos(modelo,placas,anio,tanque,eficienciaL){
     this->carroceria=carroceria;
     this->puertas=puertas;
     this->tieneAire=tieneAire;
@@ -77,7 +76,7 @@ Carro::Carro(string Modelo, string Placas, int Anio, int Tanque, int Efficiencia
 
 float Carro:: CalcularImpuesto(){
     float impuesto = 1000;
-    float AnioI = Anio;
+    float AnioI = anio;
     if (AnioI >= 2020){
         impuesto += (AnioI - 2026) * 100;
     }
@@ -86,13 +85,13 @@ float Carro:: CalcularImpuesto(){
 float Carro:: CalcularMantenimiento(int AnioA){
     float costo = 1000;
     float puertasM = puertas;
-    if (0<= Anio - AnioA ||Anio - AnioA  < 5 ){
+    if (0<= anio - AnioA or anio - AnioA  < 5 ){
         costo += 200 * puertasM;
     }
-    if (5<= Anio - AnioA ||Anio - AnioA  < 10 ){
+    if (5<= anio - AnioA or anio - AnioA  < 10 ){
         costo += 300 * puertasM;
     }
-    if (10<= Anio - AnioA){
+    if (10<= anio - AnioA){
         costo += 500 * puertasM;
     }
     if (tieneAire == true){
@@ -110,28 +109,28 @@ void Carro:: MostrarInfo(int desechable){
 //inicia moto
 class Moto: public Vehiculos{
 private:
-    string TipoCadena,Manubrio,Modalidad;
-    bool Sidecar;
+    string tipoCadena,manubrio,modalidad;
+    bool sidecar;
 public:
-    Moto(string Modelo, string Placas, int Anio, int Tanque, int EfficienciaL,string TipoCadena,string Manubrio,string Modalidad,bool Sidecar);
+    Moto(string modelo, string placas, int anio, int tanque, int efficienciaL,string tipoCadena,string manubrio,string modalidad,bool sidecar);
     void MostrarInfo (int desechable) ;
     float CalcularImpuesto() ;
     float CalcularMantenimiento(int AnioA) ;
 
 };
-Moto::Moto(string Modelo, string Placas, int Anio, int Tanque, int EfficienciaL,string TipoCadena,string Manubrio,string Modalidad,bool Sidecar)
-        : Vehiculos(Modelo,Placas,Anio,Tanque,EficienciaL){
-    this->TipoCadena=TipoCadena;
-    this->Manubrio=Manubrio;
-    this->Modalidad=Modalidad;
-    this->Sidecar=Sidecar;
+Moto::Moto(string modelo, string placas, int anio, int tanque, int efficienciaL,string tipoCadena,string manubrio,string modalidad,bool sidecar)
+        : Vehiculos(modelo,placas,anio,tanque,eficienciaL){
+    this->tipoCadena=tipoCadena;
+    this->manubrio=manubrio;
+    this->modalidad=modalidad;
+    this->sidecar=sidecar;
 };
 
 void Moto:: MostrarInfo(int desechable){
     cout<<"La moto ";
     Vehiculos::MostrarInfo(desechable);
-    cout <<" , de tipo "<<Modalidad<<" tiene una cadena "<<TipoCadena<<" con un manubrio "<<Manubrio;
-    if (Sidecar == true){
+    cout <<" , de tipo "<<modalidad<<" tiene una cadena "<<tipoCadena<<" con un manubrio "<<manubrio;
+    if (sidecar == true){
         cout<<" y tiene un sidecar"<<endl;
     }
     else{
@@ -141,24 +140,24 @@ void Moto:: MostrarInfo(int desechable){
 
 float Moto:: CalcularImpuesto(){
     float impuesto = 600;
-    float AnioI = Anio;
+    float AnioI = anio;
     if (AnioI >= 2015){
         impuesto += (AnioI - 2026) * 75;
     }
-    if (Sidecar == true){
+    if (sidecar == true){
         impuesto += 400;
     }
     return impuesto;
 }
 float Moto:: CalcularMantenimiento(int AnioA){
     float costo = 1000;
-    if (TipoCadena == "Reforzada" || TipoCadena == "O-Ring"){
+    if (tipoCadena == "Reforzada" or tipoCadena == "O-Ring"){
         costo += 300;
     }
-    if (TipoCadena == "Racing" || TipoCadena == "Directa"){
+    if (tipoCadena == "Racing" or tipoCadena == "Directa"){
         costo += 600;
     }
-    if (Sidecar == true){
+    if (sidecar == true){
         costo += 800;
     }
     return costo;
@@ -167,29 +166,29 @@ float Moto:: CalcularMantenimiento(int AnioA){
 //inicia Personas
 class Persona{
 protected:
-    string Nombre,RFC,Domicilio;
+    string nombre,RFC,domicilio;
     int ID;
 public:
-    Persona(string Nombre,string RFC,string Domicilio,int ID);
+    Persona(string nombre,string RFC,string domicilio,int ID);
     string getNombre();
     string getRFC();
     string getDomicilio();
     int getID();
 };
-Persona::Persona(string Nombre,string RFC,string Domicilio,int ID) {
-    this->Nombre = Nombre;
+Persona::Persona(string nombre,string RFC,string domicilio,int ID) {
+    this->nombre = nombre;
     this->RFC = RFC;
-    this->Domicilio = Domicilio;
+    this->domicilio = domicilio;
     this->ID = ID;
 }
 string Persona:: getNombre(){
-    return Nombre;
+    return nombre;
 }
 string Persona :: getRFC(){
     return RFC;
 }
 string Persona::getDomicilio(){
-    return Domicilio;
+    return domicilio;
 }
 int Persona::getID(){
     return ID;
@@ -204,11 +203,11 @@ private:
 public:
     Vender(float precio,string duenio,string placas,Persona* vendedor,Persona* cliente);
     void Facturar();
-    void TransferirDuenio();
+    int getPrecio();
     string getPlacas_();
 };
 
-Vender::Vender(float precio,string duenio,string placas,Persona* vendedor,Persona* cliente): Persona(Nombre,RFC,Domicilio,ID){
+Vender::Vender(float precio,string duenio,string placas,Persona* vendedor,Persona* cliente): Persona(nombre,RFC,domicilio,ID){
     this->precio = precio;
     this->duenio = duenio;
     this->placas = placas;
@@ -228,13 +227,13 @@ void Vender::Facturar(){
     cout<<"ID : "<<vendedor->getID()<<endl;
     cout<<"-----------------------------------------------------"<<endl;
     cout<<"Datos del comprador"<<endl;
-    cout<<"Nombre : "<<cliente->getNombre()<<"RFC : "<<cliente->getRFC()<<endl;
+    cout<<"Nombre : "<<cliente->getNombre()<<"  RFC : "<<cliente->getRFC()<<endl;
     cout<<"Domicilio : "<<cliente->getDomicilio()<<endl;
 }
-void Vender::TransferirDuenio(){
-    duenio = cliente->getNombre();
+int Vender:: getPrecio(){
+    return precio;
 }
 string Vender::getPlacas_(){
     return placas;
 }
-#endif //PROYECTO_INTEGRADOR_A01709797_AVANCE4_H
+#endif //PROYECTO_INTEGRADOR_A01709797_SISTEMA-VEHICULOS_H
