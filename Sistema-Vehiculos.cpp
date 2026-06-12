@@ -2,8 +2,11 @@
 #include<vector>
 #include"Sistema-Vehiculos.h"
 using namespace std;
+//llamando a las bibliotecas y al.h con las clases
 
-
+//de la línea 8-64 estoy creando objetos de las clases para que no se tenga que instanciar los objetos cada vez que se corre el codigo
+// y sea mas facil de probar. Estoy creando los objetos en el heap y metiendo sus punteros en vectores que seran lo que usare para
+//acceder a ellos. Se pasan los vectores originales para poder modificarlos directamente y usar menos RAM
 void BaseCarros(vector<Vehiculos*>& CarrosV){
     Vehiculos* carro1 = new Carro("onix","UPU-987-G",2023,50,15,"sedan",4,true);
     Vehiculos* carro2 = new Carro("cr-v", "GHI-456-A", 2024, 55, 12, "suv", 5, true);
@@ -62,6 +65,7 @@ void BaseVentas(vector<Vender*>& VentasV,vector<Persona*>& CompradorV,vector<Per
         VentasV.push_back(VenderA[i]);}
 }
 
+//linea 69-118 se piden los datos al usuario y posteriormente se crea el objeto en el heap y se incluye su puntero al vector
 void CrearCarros(vector<Vehiculos*>& CarrosV){
     string modelo,placas,carroceria;
     int anio,tanque,eficienciaL,puertas;
@@ -113,7 +117,11 @@ void CrearMotos(vector<Vehiculos*>& MotosV){
     cout<<"moto anadida"<<endl;
 }
 
+//linea 121-223 pertencen a las funcines del menu venta
 void EleccionVenta1(vector<Persona*>& CompradorV,vector<Persona*>& VendedorV,vector<Vender*>& VentasV){
+    //la funcion pide los datos al usuario para crear un nuevo objeto de Venta, se pide el vector de venta pues ahi se
+    //colocara el apuntador del objeto creado, se piden tambien los vectores Vendedor y Comprador porque desde ahi se accede
+    // a los objetos tipo persona que se necesitan para crear el objeto.
     int precio,x1,x2,xi,xe;
     string duenio,placas,nombre_comprador,nombre_vendedor;
     cout<<"Precio del vehiculo: ";
@@ -125,8 +133,9 @@ void EleccionVenta1(vector<Persona*>& CompradorV,vector<Persona*>& VendedorV,vec
     while(true){
         cout<<"Nombre del comprador: ";
         cin>>ws;
-        getline(cin,nombre_comprador);
-        for(int i=0;i<CompradorV.size();i++){
+        getline(cin,nombre_comprador); //se usa ws y getline porque algunos datos son strings con espacios
+        for(int i=0;i<CompradorV.size();i++){ //el for se encarga de que se seleccione un Comprador que exista pues si
+            //no existiera el comprador daraa error y se interrumpiria el codgio
             if(CompradorV[i]->getNombre()==nombre_comprador){
                 x1 = 1;
                 xi = i;
@@ -137,20 +146,22 @@ void EleccionVenta1(vector<Persona*>& CompradorV,vector<Persona*>& VendedorV,vec
     while(true){
         cout<<"Nombre del vendedor: ";
         cin>>ws;
-        getline(cin,nombre_vendedor);
-        for(int i=0;i<VendedorV.size();i++){
-            if(VendedorV[i]->getNombre()==nombre_vendedor){
+        getline(cin,nombre_vendedor); //es la misma lógica que para el comprador
+        for(int e=0;e<VendedorV.size();e++){
+            if(VendedorV[e]->getNombre()==nombre_vendedor){
                 x2 = 1;
-                xe = i;
+                xe = e;
                 break;}}
         if(x2==1){ break;}
         cout<<"No hay ningun vendedor con ese nombre"<<endl;
     }
-    Vender* venta=new Vender(precio,duenio,placas,VendedorV[xi],CompradorV[xi]);
+    Vender* venta=new Vender(precio,duenio,placas,VendedorV[xi],CompradorV[xe]);
     cout<<"Venta registrada"<<endl;
-    VentasV.push_back(venta);
+    VentasV.push_back(venta); //se crea el el objeto en el heap y se añade el puntero al vector
 }
 void EleccionVenta2(vector<Persona*>& CompradorV,vector<Persona*>& VendedorV){
+    //La funcion crea una nueva persona, dependiendo si es vendedor se deja el domicilio en blanco pues no se necesita,
+    //si es comprador su ID sera siempre 0 porque no tiene. Una vez creado el objeto se añade su puntero a su repectivo vector
     string eleccionPersona,nombre,RFC,domicilio;
     int ID;
     cout<<"¿Quieres anadir un nuevo vendedor(V) o comprador(C)?"<<endl;
@@ -183,6 +194,9 @@ void EleccionVenta2(vector<Persona*>& CompradorV,vector<Persona*>& VendedorV){
     }
 }
 void EleccionVenta3(vector<Vender*>& VentasV){
+    //la funcion busca entre las placas de todos los vehiculos vendidos, si las placas insertadas concuerdan con alguna
+    // de las vendidas se genera la factura, si no se encuentran las placas se manda un mensaje que no ha habido una
+    // venta con esas placas
     string placasD;
     cout<<"Coloca las placas del vehiculo que quieres facturar"<<endl;
     cin>>placasD;
@@ -195,6 +209,7 @@ void EleccionVenta3(vector<Vender*>& VentasV){
     }
 }
 void EleccionVenta4(vector<Persona*>& CompradorV,vector<Persona*>& VendedorV){
+    // La funcion recorrera el vector comprador o vendedor (dependiendo de que se haya elegio) e imprime los nombres.
     string elegir;
     cout<<"Compradores(C) o Vendedores(V)"<<endl;
     cin>>elegir;
@@ -212,13 +227,18 @@ void EleccionVenta4(vector<Persona*>& CompradorV,vector<Persona*>& VendedorV){
         cout<<"Opcion invalida"<<endl;}
 }
 void EleccionVenta5(vector<Vender*>& VentasV){
+    //Es la misma logica que la funcion anteriro, pero ahora con el vector ventas e imprime las placas y el precio de la venta
     cout<<"Imprimiendo las placas y el precio de los vehiculos vendidos"<<endl;
         for(int i =0;i<VentasV.size();i++){
             cout<<"Placas del vehiculo: "<<VentasV[i]->getPlacas_()<<" Vendido por: "<<VentasV[i]->getPrecio()<<endl;}
 }
 
-
+//de las lineas 236-359 son las funciones para cada eleccion del menu principal
 void Eleccion1(vector<Vehiculos*>& CarrosV,vector<Vehiculos*>& MotosV){
+    //la funcion puede recorrer el vector moto o carro (depende de cual se le indica) y ejecutar el metodo MostrarInfo
+    //con cada carro o moto. La funcion tambien puede alternativamente recibir una placa y recorrer los vectores carro y moto
+    //hasta encontrar el objeto que tiene la misma placa y ejecutar el metodo MostrarInfo con solo ese objeto. Si la placa no
+    //se encuentra se manda mensaje de error
     string placaD;
     cout<<"Escriba la placa del vehiculo para ver su informacion, o C/M para ver la informacion de todos las carros/motos"<<endl;
     cin>>placaD;
@@ -246,6 +266,8 @@ void Eleccion1(vector<Vehiculos*>& CarrosV,vector<Vehiculos*>& MotosV){
         cout<<"No hay ningun vehiculo con esa placa"<<endl;}
 }
 void Eleccion2(vector<Vehiculos*>& CarrosV,vector<Vehiculos*>& MotosV){
+    //esta funcion usa el mismo sistema para encontrar el vehiculo por su placa que la funcion anterior, solamente que
+    //en vez de ejecutar el metodo MostrarInfo ejecuta el Calcular impuesto
     string placaD;
     cout<<"Escriba la placa del vehiculo para ver de cuanto es su impuesto"<<endl;
     cin>>placaD;
@@ -263,6 +285,8 @@ void Eleccion2(vector<Vehiculos*>& CarrosV,vector<Vehiculos*>& MotosV){
         cout<<"No hay ningun vehiculo con esa placa"<<endl;}
 }
 void Eleccion3(vector<Vehiculos*>& CarrosV,vector<Vehiculos*>& MotosV){
+    //esta funcion usa el mismo sistema para encontrar el vehiculo por su placa que la funcion anterior, solamente que
+    //en vez de ejecutar el metodo MostrarInfo ejecuta el CalcularMantenimiento
     string placaD;
     cout<<"Escriba la placa del vehiculo para ver de cuanto es su mantenimiento"<<endl;
     cin>>placaD;
@@ -280,6 +304,8 @@ void Eleccion3(vector<Vehiculos*>& CarrosV,vector<Vehiculos*>& MotosV){
         cout<<"No hay ningun vehiculo con esa placa"<<endl;}
 }
 void Eleccion4(vector<Persona*>& CompradorV,vector<Persona*>& VendedorV,vector<Vender*>& VentasV) {
+    //Esta funcion abre el mune ventas que ejecutara las funciones de eleccionVenta y se repetira hasta que el usuario
+    //eliga salir de este menu para regresar al principal
     while(true){
         int eleccionVenta;
         cout << "------------Menu ventas-------------" << endl;
@@ -306,6 +332,8 @@ void Eleccion4(vector<Persona*>& CompradorV,vector<Persona*>& VendedorV,vector<V
     }
 }
 void Eleccion5(vector<Vehiculos*>& CarrosV,vector<Vehiculos*>& MotosV){
+    //Pregunta al usuario que tipo de vehiculo quiere crear, y dependiendo de la eleccion llama las funciones para crear
+    //dicho tipo de vehiculo
     string opcion;
     cout<<"Quieres agregar una moto(M) o carro(C)?"<<endl;
     cin>>opcion;
@@ -317,6 +345,8 @@ void Eleccion5(vector<Vehiculos*>& CarrosV,vector<Vehiculos*>& MotosV){
         cout<<"opcion invalida regresando al menú"<<endl;}
 }
 void Eleccion6(vector<Vehiculos*>& CarrosV,vector<Vehiculos*>& MotosV){
+    //Usa el mismo sistema para encontrar el vehiculo a comparar con la placa dada, una vez encuentra al vehiculo usa el 
+    //operador sobrecargado == para ver si ambos vehiculos son iguales y si lo son imprime su placa
     string placaElegidas;
     cout<<"Escribe la placa del vehiculo que quiere comparar: ";
     cin>>placaElegidas;
@@ -343,6 +373,7 @@ void Eleccion6(vector<Vehiculos*>& CarrosV,vector<Vehiculos*>& MotosV){
 }
 
 void menu(vector<Vehiculos*>& CarrosV,vector<Vehiculos*>& MotosV,vector<Persona*>& CompradorV,vector<Persona*>& VendedorV,vector<Vender*>& VentasV) {
+    //Es el menu principal, imprime las opciones que tiene el usuario y conecta la respuesta con su funcion
     while(true){
         int eleccion;
         cout << "------------Menu principal-------------" << endl;
@@ -375,16 +406,19 @@ void menu(vector<Vehiculos*>& CarrosV,vector<Vehiculos*>& MotosV,vector<Persona*
 
 
 int main(){
+    // se crean los vectores para cada clase
     vector<Vehiculos*> CarrosV;
     vector<Vehiculos*> MotosV;
     vector<Persona*> CompradorV;
     vector<Persona*> VendedorV;
     vector<Vender*> VentasV;
+    //se cargan los objetos default que inicializa el programa
     BaseCarros(CarrosV);
     BaseMotos(MotosV);
     BaseComprador(CompradorV);
     BaseVendedor(VendedorV);
     BaseVentas(VentasV,CompradorV,VendedorV);
+    //se llama al menu
     menu(CarrosV,MotosV,CompradorV,VendedorV,VentasV);
     return 0;
 }
